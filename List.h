@@ -50,7 +50,6 @@ public:
 
 
 
-
 template <typename T,int MAXLVL = 32>
 class SkipList {
 private:
@@ -91,6 +90,9 @@ private:
 		currentNode = currentNode->getNext(0);
 		return currentNode;
 	}
+
+
+
 public:
 	
 	
@@ -102,24 +104,32 @@ public:
 
 	SkipList& insert(T key) {
 
-		Node* x = _search(key); 									//O(log(N))
+		Node* x = _search(key); 									
 		
 		int levelOfNode = _randomLevel();
-		if (levelOfNode > _CurrentLvL) {
-			for (int i = _CurrentLvL + 1; i <=levelOfNode; i++) {
-				_PathSearched[i] = _Head;
+
+
+		if (levelOfNode > _CurrentLvL) {							
+			for (int i = _CurrentLvL + 1; i <=levelOfNode; i++) {   
+				_PathSearched[i] = _Head;			
+				}
 			}
 			_CurrentLvL = levelOfNode;
 		}
+		
 		x = new Node(key);
+
 		for (int i = 0; i <= levelOfNode; i++) {
 			x->setNext(_PathSearched[i]->getNext(i), i);
 			_PathSearched[i]->setNext(x,i);
 		}
+		
+
 		return *this;
 	}
 
 	SkipList& erase(T key) {
+
 		Node* nodeToErase = _search(key);
 		
 		if (nodeToErase->getKey() == key) {
@@ -131,6 +141,8 @@ public:
 		}
 
 		delete nodeToErase;
+
+
 		while (_CurrentLvL > 0 && _Head->getNext(_CurrentLvL) == _NIL)
 			_CurrentLvL--;
 		
